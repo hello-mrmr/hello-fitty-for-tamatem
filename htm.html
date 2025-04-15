@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello Fitty :)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>  
+
+    <style>
+        /* Video Player Styling */
+        .video-player {
+            margin: 25px auto;
+            background-color: #ffebf0;
+            padding: 20px;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 105, 157, 0.2);
+        }
+      
+        .video-container {
+            margin: 15px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: #ffd1dc;
+            padding: 15px;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-container video {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 15px;
+        }
+      
+        /* Reaction Buttons */
+        .reaction-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+      
+        .like-btn, .dislike-btn {
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1.1em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+      
+        .like-btn {
+            background-color: #a8f0c8;
+            color: #0a5c36;
+        }
+      
+        .dislike-btn {
+            background-color: #ffc7d9;
+            color: #8b0000;
+        }
+      
+        /* Kitty Animations */
+        @keyframes happy {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.2) rotate(-10deg); }
+            50% { transform: scale(1.1) rotate(10deg); }
+            75% { transform: scale(1.15) rotate(-5deg); }
+        }
+      
+        @keyframes angry {
+            0% { transform: translateY(0) rotate(0deg); }
+            20% { transform: translateY(-10px) rotate(5deg); }
+            40% { transform: translateY(0) rotate(-5deg); }
+            60% { transform: translateY(-5px) rotate(3deg); }
+            80% { transform: translateY(0) rotate(-3deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+      
+        .happy-animation {
+            animation: happy 0.8s ease-in-out;
+        }
+      
+        .angry-animation {
+            animation: angry 0.5s ease-in-out;
+        }
+      
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .reaction-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .video-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .video-btn {
+            background-color: #ff9dd1;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+            text-align: left;
+        }
+        
+        .video-btn:hover {
+            background-color: #ff6b9d;
+        }
+        
+        /* Pink & Kitty Theme Styles */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            background-color: #fff5f7;
+            color: #ff6b9d;
+        }
+
+        header {
+            background-color: #ff9dd1;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(255, 155, 209, 0.3);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 50px 20px;
+            background-color: #ffd1dc;
+        }
+
+        .hero-text h2 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        .hero-text p {
+            font-size: 1.2em;
+        }
+
+        .cta-button {
+            background-color: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.2em;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .cta-button:hover {
+            background-color: #ff4785;
+        }
+
+        /* Sections */
+        .section-pink {
+            background-color: #ffd1dc;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .section-white {
+            background-color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        /* Workout Cards */
+        .workout-card {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .exercise {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Nutrition Grid */
+        .nutrition-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .food-card {
+            background-color: #ffebf0;
+            padding: 20px;
+            border-radius: 15px;
+            width: 200px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            background-color: white;
+            border-radius: 20px;
+            height: 30px;
+            width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: #ff6b9d;
+            height: 100%;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #ff9dd1;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        footer span {
+            font-weight: bold;
+        }
+
+        #surprise-btn {
+            background-color: white;
+            color: #ff6b9d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-family: 'Comic Sans MS', cursive;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #surprise-btn:hover {
+            background-color: #ffebf0;
+        }
+
+        /* New Add-Ons */
+        .hidden {
+            display: none;
+        }
+
+        /* Workout Complete Buttons */
+        .complete-btn {
+            background-color: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        .complete-btn:hover {
+            background-color: #ff4785;
+        }
+
+        .add-exercise-btn {
+            background-color: white;
+            color: #ff6b9d;
+            border: 2px dashed #ff6b9d;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        /* Nutrition Form */
+        #nutrition-form {
+            background-color: #ffebf0;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        #nutrition-form input {
+            display: block;
+            width: 90%;
+            padding: 10px;
+            margin: 10px auto;
+            border: 2px solid #ff9dd1;
+            border-radius: 15px;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        #nutrition-form button {
+            background-color: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        /* Calendar */
+        .calendar {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-header button {
+            background-color: #ff9dd1;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day {
+            background-color: #ffebf0;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 40px;
+        }
+
+        .workout-day {
+            background-color: #ff9dd1;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Progress Container */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #ff9dd1;
+        }
+        body.dark-mode .section-white {
+            background-color: #333;
+        }
+        body.dark-mode .exercise,
+        body.dark-mode .food-card,
+        body.dark-mode .calendar {
+            background-color: #444;
+            color: #ffd1dc;
+        }
+        body.dark-mode #dark-mode-toggle {
+            background-color: #ff6b9d;
+            color: white;
+        }
+
+        /* Water Tracker */
+        .water-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+        .water-bottle img {
+            width: 100px;
+            height: auto;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .water-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .water-btn {
+            background-color: #6bb9ff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Weight Tracker */
+        .weight-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #weight-form {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        #weight-form input {
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid #ff9dd1;
+            min-width: 150px;
+        }
+        #weight-form button {
+            background-color: #ff6b9d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* Music Player */
+        .music-player {
+            margin-top: 20px;
+            background-color: #ffebf0;
+            padding: 15px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+        .music-player audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        /* Dark Mode Toggle */
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #ffd1dc;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+            .workout-card, .nutrition-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .water-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .video-container video {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Header with Animated Kitty -->
+    <header>
+        <div class="logo">
+            <h1>Hello Fitty <span>🩷</span></h1>
+            <img src="logo.jpg" alt="mrmr with dumbbell" width="80" id="kitty-logo">
+        </div>
+        <nav>
+            <a href="#workout"><i class="fas fa-dumbbell"></i> Workout</a>
+            <a href="#nutrition"><i class="fas fa-utensils"></i> Nutrition</a>
+            <a href="#water"><i class="fas fa-tint"></i> Water</a>
+            <a href="#weight"><i class="fas fa-weight"></i> Weight</a>
+            <a href="#calendar"><i class="fas fa-calendar-alt"></i> Calendar</a>
+        </nav>
+    </header>
+
+    <!-- Video Player Section -->
+    <div class="video-player">
+        <h3>TFAREJ TFAREJ 📹</h3>
+        <div class="video-container">
+            <video id="workout-video" controls>
+                <source src="miku.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <div class="reaction-buttons">
+            <button class="like-btn" onclick="react('like')">
+                <span>I Like It!</span> 😻
+            </button>
+            <button class="dislike-btn" onclick="react('dislike')">
+                <span>I Dislike It!</span> 😾
+            </button>
+        </div>
+    </div>
+
+    <!-- Workout Tracker -->
+    <section id="workout" class="section-pink">
+        <h2><i class="fas fa-dumbbell"></i> Today's Workout</h2>
+        <div class="workout-card" id="workout-list">
+            <div class="exercise">
+                <h3>Bench Press <i class="fas fa-heart"></i></h3>
+                <p>3 sets x 10 reps</p>
+                <button class="complete-btn">Done! <i class="fas fa-check"></i></button>
+            </div>
+            <div class="exercise">
+                <h3>Squats <i class="fas fa-heart"></i></h3>
+                <p>4 sets x 12 reps</p>
+                <button class="complete-btn">Done! <i class="fas fa-check"></i></button>
+            </div>
+            <div class="exercise">
+                <h3>Bicep Curls <i class="fas fa-heart"></i></h3>
+                <p>3 sets x 15 reps</p>
+                <button class="complete-btn">Done! <i class="fas fa-check"></i></button>
+            </div>
+        </div>
+        <form id="add-exercise-form" class="hidden">
+            <input type="text" placeholder="Exercise name" required>
+            <input type="text" placeholder="Sets x Reps" required>
+            <button type="submit">Add Exercise</button>
+        </form>
+        <button class="add-exercise-btn" id="show-exercise-form">+ Add Exercise</button>
+    </section>
+
+    <!-- Nutrition Tracker -->
+    <section id="nutrition" class="section-white">
+        <h2><i class="fas fa-utensils"></i> Daily Nutrition</h2>
+        <div class="nutrition-grid" id="meal-list">
+            <div class="food-card">
+                <h3>Breakfast</h3>
+                <p>BANANA + Protein Shake + two eggs</p>
+                <button class="edit-btn"><i class="fas fa-edit"></i></button>
+            </div>
+            <div class="food-card">
+                <h3>Lunch</h3>
+                <p>kamounia bil 9arnit + salata fruit de mer + patté</p>
+                <button class="edit-btn"><i class="fas fa-edit"></i></button>
+            </div>
+            <div class="food-card">
+                <h3>Dinner</h3>
+                <p>9arous mechwi + hrisa mechwiia + slata +roz</p>
+                <button class="edit-btn"><i class="fas fa-edit"></i></button>
+            </div>
+        </div>
+        <form id="nutrition-form" class="hidden">
+            <input type="text" placeholder="Meal (e.g., Breakfast)" required>
+            <input type="text" placeholder="What did you eat?" required>
+            <button type="submit">Save <i class="fas fa-heart"></i></button>
+        </form>
+        <button id="add-food-btn" class="cta-button">+ Add Meal</button>
+    </section>
+
+    <!-- Water Tracker -->
+    <section id="water" class="section-pink">
+        <h2><i class="fas fa-tint"></i> Water Intake</h2>
+        <div class="water-container">
+            <div class="water-bottle">
+                <img src="water.avif" alt="Water bottle" width="100">
+                <p id="water-count">0/8 glasses</p>
+            </div>
+            <div class="water-buttons">
+                <button class="water-btn" id="add-water">+ Add Glass <i class="fas fa-tint"></i></button>
+                <button class="water-btn" id="reset-water">Reset <i class="fas fa-redo"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Weight Tracker -->
+    <section id="weight" class="section-white">
+        <h2><i class="fas fa-weight"></i> Weight Log</h2>
+        <div class="weight-container">
+            <canvas id="weight-chart"></canvas>
+            <form id="weight-form">
+                <input type="number" placeholder="Weight (kg)" step="0.1" required>
+                <button type="submit">Log <i class="fas fa-pen"></i></button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Workout Calendar -->
+    <section id="calendar" class="section-pink">
+        <h2><i class="fas fa-calendar-alt"></i> Workout Calendar</h2>
+        <div class="calendar">
+            <div class="calendar-header">
+                <button id="prev-month"><i class="fas fa-arrow-left"></i></button>
+                <h3 id="current-month">April 2024</h3>
+                <button id="next-month"><i class="fas fa-arrow-right"></i></button>
+            </div>
+            <div class="calendar-grid" id="calendar-days"></div>
+        </div>
+    </section>
+
+    <!-- Footer with Surprise -->
+    <footer>
+        <p>Made by <span>MRMR</span> for <span> MY LIL TAMATEM</span> 💖</p>
+        <button id="surprise-btn">Click for a Surprise!</button>
+    </footer>
+
+    <script>
+        // Video reactions function
+        function react(reaction) {
+            const kitty = document.getElementById('kitty-logo');
+            
+            // Reset classes
+            kitty.classList.remove('happy-animation', 'angry-animation');
+            
+            // Force reflow to restart animation
+            void kitty.offsetWidth;
+            
+            // Apply new animation
+            if (reaction === 'like') {
+                kitty.classList.add('happy-animation');
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ["#a8f0c8", "#ffd1dc", "#ffffff"]
+                });
+            } else {
+                kitty.classList.add('angry-animation');
+                
+                // Create "angry" effect particles
+                const heart = document.createElement('div');
+                heart.innerHTML = '💢';
+                heart.style.position = 'absolute';
+                heart.style.fontSize = '30px';
+                heart.style.animation = 'fadeOut 1s forwards';
+                document.querySelector('.video-container').appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 1000);
+            }
+        }
+      
+        // Add fadeOut animation to style
+        document.head.insertAdjacentHTML('beforeend', `
+            <style>
+                @keyframes fadeOut {
+                    0% { opacity: 1; transform: translateY(0) scale(1); }
+                    100% { opacity: 0; transform: translateY(-50px) scale(1.5); }
+                }
+            </style>
+        `);
+      
+        // Initialize when DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById("dark-mode-toggle");
+            darkModeToggle.addEventListener("click", function() {
+                document.body.classList.toggle("dark-mode");
+                darkModeToggle.innerHTML = document.body.classList.contains("dark-mode") ? 
+                    '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                localStorage.setItem("darkMode", document.body.classList.contains("dark-mode"));
+            });
+
+            // Check for saved dark mode preference
+            if (localStorage.getItem("darkMode") === "true") {
+                document.body.classList.add("dark-mode");
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // Animate Kitty on Hover
+            const kittyLogo = document.getElementById("kitty-logo");
+            if (kittyLogo) {
+                kittyLogo.addEventListener("mouseover", function() {
+                    this.style.transform = "rotate(10deg)";
+                });
+                kittyLogo.addEventListener("mouseout", function() {
+                    this.style.transform = "rotate(0deg)";
+                });
+            }
+
+            // Motivational Quotes
+            const quotes = [
+                "u're stronger than u think! 💪",
+                "HATEM BATATA 7ALIB CHOKOLATA",
+                "every rep counts! 🎀",
+                "mrmr believes in u! ^^",
+                "u're stronger than yesterday!🎀💪",
+                "3ACH SAL7OUF 3ACH",
+                "one day at a time!",
+                "no pain, no pawsitive gains! 🐾",
+                "progress > perfection! 🌟",
+                "MORE PASSION! MORE ENERGIY! MORE FOOTWORK!!",
+                "small steps still move you forward! 👟",
+                "u vs u and u're winning! 👑",
+                "leg day? more like slay day! 💅",
+                "Tmrw u'll be glad u did this! 🌸"
+            ];
+            
+            // Water Tracker
+            let waterGlasses = parseInt(localStorage.getItem("waterGlasses")) || 0;
+            document.getElementById("water-count").textContent = `${waterGlasses}/8 glasses`;
+            
+            document.getElementById("add-water").addEventListener("click", function() {
+                if (waterGlasses < 8) {
+                    waterGlasses++;
+                    document.getElementById("water-count").textContent = `${waterGlasses}/8 glasses`;
+                    localStorage.setItem("waterGlasses", waterGlasses);
+                    
+                    if (waterGlasses === 8) {
+                        alert("mrmr says: hydration goal reached!! ^^ 💧");
+                        confetti({
+                            particleCount: 100,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ["#6bb9ff", "#ffffff"]
+                        });
+                    }
+                }
+            });
+            
+            document.getElementById("reset-water").addEventListener("click", function() {
+                waterGlasses = 0;
+                document.getElementById("water-count").textContent = "0/8 glasses";
+                localStorage.setItem("waterGlasses", waterGlasses);
+            });
+
+            // Weight Chart
+            const weightChart = new Chart(
+                document.getElementById("weight-chart"),
+                {
+                    type: "line",
+                    data: {
+                        labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+                        datasets: [{
+                            label: "Weight (kg)",
+                            data: [75, 74.5, 74, 73.5],
+                            borderColor: "#ff6b9d",
+                            backgroundColor: "#ff9dd1",
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: { 
+                                    font: { 
+                                        family: "'Comic Sans MS', cursive",
+                                        size: 14
+                                    } 
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                }
+            );
+
+            // Weight Form
+            document.getElementById("weight-form").addEventListener("submit", function(e) {
+                e.preventDefault();
+                const newWeight = parseFloat(this.elements[0].value);
+                if (!isNaN(newWeight)) {
+                    weightChart.data.labels.push(`Week ${weightChart.data.labels.length + 1}`);
+                    weightChart.data.datasets[0].data.push(newWeight);
+                    weightChart.update();
+                    this.reset();
+                    
+                    // Kitty celebration for weight loss!
+                    if (weightChart.data.datasets[0].data.length > 1 && 
+                        newWeight < weightChart.data.datasets[0].data[weightChart.data.datasets[0].data.length - 2]) {
+                        confetti({
+                            particleCount: 150,
+                            spread: 70,
+                            origin: { y: 0.6 },
+                            colors: ["#ff9dd1", "#ffb6c1", "#ffffff"]
+                        });
+                    }
+                }
+            });
+
+            // Calendar Logic
+            const monthNames = ["January", "February", "March", "April", "May", "June", 
+                              "July", "August", "September", "October", "November", "December"];
+            let currentMonth = new Date().getMonth();
+            let currentYear = new Date().getFullYear();
+
+            function renderCalendar() {
+                document.getElementById("current-month").textContent = `${monthNames[currentMonth]} ${currentYear}`;
+                
+                // Get first day of month and total days
+                const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+                const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                
+                // Clear previous days
+                const calendarGrid = document.getElementById("calendar-days");
+                calendarGrid.innerHTML = "";
+                
+                // Add empty cells for days before the first day
+                for (let i = 0; i < firstDay; i++) {
+                    calendarGrid.appendChild(document.createElement("div"));
+                }
+                
+                // Add day cells
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dayElement = document.createElement("div");
+                    dayElement.className = "day";
+                    dayElement.textContent = day;
+                    
+                    // Randomly mark some days as workout days (for demo)
+                    if (Math.random() > 0.7) {
+                        dayElement.classList.add("workout-day");
+                    }
+                    
+                    calendarGrid.appendChild(dayElement);
+                }
+            }
+
+            document.getElementById("prev-month").addEventListener("click", function() {
+                if (currentMonth === 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                } else {
+                    currentMonth--;
+                }
+                renderCalendar();
+            });
+
+            document.getElementById("next-month").addEventListener("click", function() {
+                if (currentMonth === 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                } else {
+                    currentMonth++;
+                }
+                renderCalendar();
+            });
+
+            renderCalendar();
+
+            // Exercise Form Toggle
+            document.getElementById("show-exercise-form").addEventListener("click", function() {
+                document.getElementById("add-exercise-form").classList.toggle("hidden");
+            });
+
+            // Add Exercise
+            document.getElementById("add-exercise-form").addEventListener("submit", function(e) {
+                e.preventDefault();
+                const exerciseName = this.elements[0].value;
+                const exerciseSets = this.elements[1].value;
+                
+                const exerciseDiv = document.createElement("div");
+                exerciseDiv.className = "exercise";
+                exerciseDiv.innerHTML = `
+                    <h3>${exerciseName} <i class="fas fa-heart"></i></h3>
+                    <p>${exerciseSets}</p>
+                    <button class="complete-btn">Done! <i class="fas fa-check"></i></button>
+                `;
+                
+                document.getElementById("workout-list").appendChild(exerciseDiv);
+                this.reset();
+                this.classList.add("hidden");
+                
+                // Add event listener to new button
+                exerciseDiv.querySelector(".complete-btn").addEventListener("click", function() {
+                    confetti({
+                        particleCount: 50,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ["#ff6b9d", "#ff9dd1"]
+                    });
+                });
+            });
+
+            // Nutrition Form Toggle
+            document.getElementById("add-food-btn").addEventListener("click", function() {
+                document.getElementById("nutrition-form").classList.toggle("hidden");
+            });
+
+            // Add Meal
+            document.getElementById("nutrition-form").addEventListener("submit", function(e) {
+                e.preventDefault();
+                const mealType = this.elements[0].value;
+                const mealContent = this.elements[1].value;
+                
+                const mealDiv = document.createElement("div");
+                mealDiv.className = "food-card";
+                mealDiv.innerHTML = `
+                    <h3>${mealType}</h3>
+                    <p>${mealContent}</p>
+                    <button class="edit-btn"><i class="fas fa-edit"></i></button>
+                `;
+                
+                document.getElementById("meal-list").appendChild(mealDiv);
+                this.reset();
+                this.classList.add("hidden");
+            });
+
+            // Surprise Button
+            document.getElementById("surprise-btn").addEventListener("click", function() {
+                confetti({
+                    particleCount: 200,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ["#ff9dd1", "#ffb6c1", "#ffffff"]
+                });
+                
+                // Show random motivational quote
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                alert(randomQuote);
+            });
+
+            // Complete Exercise Buttons
+            document.querySelectorAll(".complete-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    confetti({
+                        particleCount: 50,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ["#ff6b9d", "#ff9dd1"]
+                    });
+                });
+            });
+
+            // Edit buttons for food cards
+            document.querySelectorAll(".edit-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    const card = this.closest(".food-card");
+                    const mealType = card.querySelector("h3").textContent;
+                    const mealContent = card.querySelector("p").textContent;
+                    
+                    // Fill the form with existing values
+                    document.getElementById("nutrition-form").elements[0].value = mealType;
+                    document.getElementById("nutrition-form").elements[1].value = mealContent;
+                    document.getElementById("nutrition-form").classList.remove("hidden");
+                    
+                    // Remove the old card
+                    card.remove();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
